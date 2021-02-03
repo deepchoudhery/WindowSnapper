@@ -13,7 +13,8 @@
         IsVisibleChanged="OnIsVisibleChanged">
     <Grid>
         <Button Content="Set Hot Key" HorizontalAlignment="Left" Margin="408,127,0,0" VerticalAlignment="Top" Width="98" Height="35"/>
-        <Button Content="Configure Preferences" HorizontalAlignment="Left" Margin="545,70,0,0" VerticalAlignment="Top" Width="220" Height="92" />
+        <Button Content="Set Preferences" HorizontalAlignment="Left" Margin="545,70,0,0" VerticalAlignment="Top" Width="220" Height="92" Click="SetPreferences_OnClick"/>
+        <Button Content="Configure Preferences" HorizontalAlignment="Left" Margin="545,191,0,0" VerticalAlignment="Top" Width="220" Height="92" />
         <ComboBox 
             HorizontalAlignment="Left"
             Margin="40,70,0,0" 

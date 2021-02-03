@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using WindowSnapper.Models;
@@ -13,6 +14,10 @@ namespace WindowSnapper
     /// </summary>
     public partial class MainWindow : Window
     {
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+
+
         private NotifyIcon _notifyIcon;
         private WindowState _storedWindowState = WindowState.Normal;
 
@@ -28,7 +33,6 @@ namespace WindowSnapper
             
             //_notifyIcon.Icon = new System.Drawing.Icon("trayIcon.ico");
 
-            //TODO load all profiles
             /*TODO if default profile is present,
                         minimize to taskbar,
                    else 
@@ -47,14 +51,24 @@ namespace WindowSnapper
             {
 
             }
-
-            var activeProcesses = GetActiveProcesses();
-            var monitors = Screen.AllScreens;
-            //TODO get a list of monitors
             //TODO snap apps in monitors
             //TODO save a profile
-
             InitializeComponent();
+        }
+
+        public void SetPreferences_OnClick(object sender, EventArgs e)
+        {
+            var processes = GetActiveProcesses();
+            var monitors = Screen.AllScreens;
+
+            IList<ProcessInfo> processInfoList = new List<ProcessInfo>();
+            foreach (var process in processes)
+            {
+                IntPtr ptr = process.MainWindowHandle;
+                Rect NotepadRect = new Rect();
+                GetWindowRect(ptr, ref NotepadRect);
+                processInfoList.Add(new ProcessInfo(process.ProcessName, string.Empty, -1, null));
+            }
         }
 
         private void _notifyIcon_Click(object sender, EventArgs e)
@@ -76,8 +90,6 @@ namespace WindowSnapper
                 }
             }
             return activeProcesses;
-
-            //SetWindowPos()
         }
 
         private List<Profile> LoadProfiles()
@@ -132,7 +144,5 @@ namespace WindowSnapper
         {
 
         }
-
-
     }
 }
