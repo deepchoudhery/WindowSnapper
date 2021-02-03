@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -15,8 +16,19 @@ namespace WindowSnapper
     public partial class MainWindow : Window
     {
         [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+        public static extern bool GetWindowRect(IntPtr hwnd, ref RECT rectangle);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
 
         private NotifyIcon _notifyIcon;
         private WindowState _storedWindowState = WindowState.Normal;
@@ -65,9 +77,20 @@ namespace WindowSnapper
             foreach (var process in processes)
             {
                 IntPtr ptr = process.MainWindowHandle;
-                Rect NotepadRect = new Rect();
+                RECT NotepadRect = new RECT();
                 GetWindowRect(ptr, ref NotepadRect);
-                processInfoList.Add(new ProcessInfo(process.ProcessName, string.Empty, -1, null));
+                try
+                {
+                    if (process.MainModule.ModuleName == "Discord.exe")
+                    {
+                        MoveWindow(ptr, 0, 0, NotepadRect.right - Math.Max(0, NotepadRect.left) - 20, NotepadRect.bottom - Math.Max(0, NotepadRect.top) - 100, true);
+                    }
+                }
+                catch (Win32Exception ex)
+                {
+                }
+                
+                //processInfoList.Add(new ProcessInfo(process.ProcessName, string.Empty, -1, null));
             }
         }
 
