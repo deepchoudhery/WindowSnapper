@@ -61,12 +61,12 @@ namespace WindowSnapper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static System.Drawing.Icon trayIcon {
+        internal static byte[] profiles {
             get {
-                object obj = ResourceManager.GetObject("trayIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("profiles", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

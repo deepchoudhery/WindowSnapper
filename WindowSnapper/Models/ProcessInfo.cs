@@ -1,26 +1,25 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace WindowSnapper.Models
 {
-    internal class ProcessInfo
+    public class ProcessInfo
     {
-        [JsonConstructor]
         public ProcessInfo(
-            string displayName,
-            string imagePath,
-            int monitorNumber,
-            Tuple<int, int> coords)
+            int x,
+            int y,
+            int width,
+            int height)
         {
-            DisplayName = displayName;
-            IconPath = imagePath;
-            MonitorNumber = monitorNumber;
-            Coords = coords;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
-        public string DisplayName { get; set; } 
-        public string IconPath { get; set; }
-        public int MonitorNumber { get; set; }
-        public Tuple<int, int> Coords { get; set; }
+        public int X { get; }
+        public int Y { get; }
+        public int Width { get; }
+        public int Height { get; }
     }
 }
